@@ -1,5 +1,10 @@
 ## CDK8S Nginx + PHP-FPM
 
+這份 repo 整合了 機密管理+nginx+php-fpm+hpa的相關設定
+
+## EKS 前置作業
+1. 安裝 <a href="https://external-secrets.io/latest/">external-secrets</a>
+2. 安裝 <a href="https://kubernetes-sigs.github.io/aws-load-balancer-controller/">AWS ALB Controller</a>
 ## Jenkins Pipeline 
 
 ```
@@ -26,9 +31,8 @@ pipeline {
                 sh 'docker system prune -f'
                 sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY_URL}'
                 sh 'docker build --no-cache -f ./cdk8s/docker/nginx/Dockerfile -t ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}:latest $PWD'
-                sh 'docker tag ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}:latest ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}l:${BUILD_NUMBER}'
-                sh 'docker push ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}:php-fpm-${BUILD_NUMBER}'
-            }
+                sh 'docker tag ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}:latest ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}:nginx-${BUILD_NUMBER}'
+                sh 'docker push ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}:nginx-${BUILD_NUMBER}'            }
         }
         stage('Push ECR - PHP-FPM') {
             agent any
@@ -42,8 +46,8 @@ pipeline {
                 sh 'docker system prune -f'
                 sh 'aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPOSITORY_URL}'
                 sh 'docker build --no-cache -f ./cdk8s/docker/php-fpm/Dockerfile -t ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}:latest $PWD'
-                sh 'docker tag ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}:latest ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}l:${BUILD_NUMBER}'
-                sh 'docker push ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}:php-fpm-${BUILD_NUMBER}'
+                sh 'docker tag ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}:latest ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}:php-fpm-${BUILD_NUMBER}'
+                sh 'docker push ${ECR_REPOSITORY_URL}/${ECR_REPOSITORY_NAME}:php-fpm-${BUILD_NUMBER}'           
             }
         }
         stage('generate yml') {
