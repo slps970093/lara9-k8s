@@ -20,8 +20,9 @@ RUN apt-get install -y --no-install-recommends libfreetype6-dev libjpeg62-turbo-
 RUN docker-php-ext-install -j$(nproc) bcmath calendar exif gettext sockets dba mysqli pcntl pdo_mysql shmop sysvmsg sysvsem sysvshm iconv
 
 # supervisor
-RUN apt-get install supervisor python3 python3-pip git -y &&\
-    pip install git+https://github.com/coderanger/supervisor-stdout
+RUN apt-get install supervisor python3 python3-pip git pipx -y &&\
+    pipx ensurepath &&\
+    pipx install git+https://github.com/coderanger/supervisor-stdout
 
 # redis EXT
 RUN pecl install redis && docker-php-ext-enable redis
