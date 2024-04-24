@@ -188,14 +188,13 @@ http {
           kind: 'SecretStore',
           metadata: {
               namespace: phpFpmCfg.namespace,
-              name: "cometcast-laravel-secret-store"
+              name: "cdk8s-laravel-secret-store"
           },
           spec: {
               provider: {
                   aws: {
                       service: "SecretsManager",
-                      // role: "",
-                      region: "<<AWS-REGION>>",
+                      region: "<<AWS_REGION>>",
                   }
               }
           }
@@ -206,7 +205,7 @@ http {
           kind: 'ExternalSecret',
           metadata: {
               namespace: phpFpmCfg.namespace,
-              name: 'cometcast-laravel-external-secret'
+              name: 'cdk8s-laravel-external-secret'
           },
           spec: {
               refreshInterval: "5m",
@@ -221,7 +220,7 @@ http {
               dataFrom: [
                   {
                       extract: {
-                          key: "<<AWS-SECRET-MANAGER-NAME>>"
+                          key: "<<AWS_SECRET_MANAGER_NAME>>"
                       }
                   }
               ]
@@ -279,7 +278,7 @@ http {
               template: {
                   metadata: { labels: phpFpmCfg.label },
                   spec: {
-                      serviceAccount: "<<SERVICE_ACCOUNT>>",
+                      // serviceAccount: "<<SERVICE_ACCOUNT>>",
                       containers: [
                           {
                               name: "php-fpm",
@@ -294,7 +293,7 @@ http {
                               volumeMounts: [
                                   {
                                       name: "fpm-config",
-                                      mountPath: " "
+                                      mountPath: "/usr/local/etc/php-fpm.d/"
                                   }
                               ],
                               ports: [ { containerPort: 9000 } ]
@@ -472,9 +471,9 @@ http {
           metadata: {
               namespace: nginxCfg.namespace,
               annotations: {
-                  "alb.ingress.kubernetes.io/load-balancer-name": "<<AWS_ALB_NAME>>-alb",
+                  "alb.ingress.kubernetes.io/load-balancer-name": "<<AWS_ALB_NAME_PREFIX>>-alb",
                   "alb.ingress.kubernetes.io/scheme": "internet-facing",
-                  "alb.ingress.kubernetes.io/group.name": "<<AWS_ALB_NAME>>-tg",
+                  "alb.ingress.kubernetes.io/group.name": "<<AWS_ALB_NAME_PREFIX>>-tg",
                   "alb.ingress.kubernetes.io/target-type": "ip",
                   "alb.ingress.kubernetes.io/certificate-arn": "<<AWS_CERTIFICATE_ARN>>",
                   "alb.ingress.kubernetes.io/listen-ports": '[{"HTTP": 80}, {"HTTPS":443}]',
