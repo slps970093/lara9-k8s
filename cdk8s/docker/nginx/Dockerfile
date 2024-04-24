@@ -1,7 +1,7 @@
 FROM nginx:1.25.5
 
 RUN apt-get update -y &&\
-    apt-get install wget -y
+    apt-get install wget gnupg2 -y
 # filebeat
 RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - &&\
     echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-8.x.list &&\

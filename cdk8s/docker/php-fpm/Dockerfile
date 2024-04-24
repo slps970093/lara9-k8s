@@ -4,7 +4,7 @@ FROM php:8.2-fpm
 COPY ./ /var/www/html
 
 RUN apt-get update -y &&\
-    apt-get install wget -y
+    apt-get install wget gnupg2 -y
 
 # filebeat
 RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - &&\
