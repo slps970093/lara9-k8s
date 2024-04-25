@@ -116,7 +116,7 @@ server {
               `,
               "nginx.conf": `
 user  nginx;
-worker_processes  auto;
+worker_processes  1;
 
 error_log  /var/log/nginx/error.log notice;
 pid        /var/run/nginx.pid;
@@ -246,6 +246,10 @@ http {
                                   {
                                       name: "nginx-site",
                                       mountPath: "/etc/nginx/sites-available"
+                                  },
+                                  {
+                                      name: "nginx-cfg",
+                                      mountPath: "/etc/nginx"
                                   }
                               ]
                           },
@@ -259,6 +263,18 @@ http {
                                       {
                                           key: "default",
                                           path: "default"
+                                      }
+                                  ]
+                              }
+                          },
+                          {
+                              name: "nginx-cfg",
+                              configMap: {
+                                  name: cfgMapNginx.name,
+                                  items: [
+                                      {
+                                          key: "nginx.conf",
+                                          path: "nginx.conf"
                                       }
                                   ]
                               }
