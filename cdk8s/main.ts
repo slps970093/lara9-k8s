@@ -350,7 +350,8 @@ http {
                       targetPort: IntOrString.fromNumber(80),
                       protocol: "TCP"
                   }
-              ]
+              ],
+              selector: nginxCfg.label
           }
       })
 
@@ -368,7 +369,8 @@ http {
                       targetPort: IntOrString.fromNumber(9000),
                       protocol: "TCP"
                   }
-              ]
+              ],
+              selector: phpFpmCfg.label
           }
       });
 
