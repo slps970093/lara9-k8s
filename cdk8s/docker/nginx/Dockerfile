@@ -13,7 +13,7 @@ RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add 
 RUN apt-get install -y -f vim curl apt-transport-https filebeat  &&\
     apt-get install supervisor python3 python3-pip git pipx -y &&\
     pipx ensurepath &&\
-    pip install git+https://github.com/coderanger/supervisor-stdout &&\
+    pip install git+https://github.com/coderanger/supervisor-stdout --break-system-packages &&\
     apt-get clean &&\
     apt-get autoremove &&\
     rm -rf /var/lib/apt/lists/* &&\
