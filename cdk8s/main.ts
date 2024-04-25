@@ -249,7 +249,8 @@ http {
                                   },
                                   {
                                       name: "nginx-cfg",
-                                      mountPath: "/etc/nginx"
+                                      mountPath: "/etc/nginx/nginx.conf",
+                                      subPath: "nginx.conf"
                                   }
                               ]
                           },
