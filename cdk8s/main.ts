@@ -21,6 +21,7 @@ export class MyChart extends Chart {
               app: `nginx-${id}`
           },
           namespace: "<<NAMESPACE>>",
+          serviceName: "nginx-serv",
           replicas: {
               min: 1,
               max: 50
@@ -32,6 +33,7 @@ export class MyChart extends Chart {
               app: `php-fpm-${id}`
           },
           namespace: "<<NAMESPACE>>",
+          serviceName: "php-fpm-serv",
           replicas: {
               min: 1,
               max: 50
@@ -92,10 +94,10 @@ server {
     location ~ \\.php$ {
         try_files $uri $uri/ /index.php?$query_string;
         fastcgi_split_path_info ^(.+\\.php)(/.+)$;
-        fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+        fastcgi_pass ${phpFpmCfg.serviceName}.${phpFpmCfg.namespace}.svc.cluster.local:9000;
         fastcgi_index index.php;
         include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME /var/www/html/public$fastcgi_script_name;
         fastcgi_param PATH_INFO $fastcgi_path_info;
 
         fastcgi_read_timeout 600s;
@@ -146,6 +148,7 @@ http {
     #gzip  on;
 
     include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-available/*;
 }
               `
           }
@@ -339,7 +342,7 @@ http {
       const servNginx = new KubeService(this, 'nginx-serv', {
           metadata: {
               namespace: nginxCfg.namespace,
-              name: "nginx-serv"
+              name: nginxCfg.serviceName
           },
           spec: {
               type: ServiceType.NODE_PORT,
@@ -358,7 +361,7 @@ http {
       new KubeService(this, 'php-fpm-serv', {
           metadata: {
               namespace: phpFpmCfg.namespace,
-              name: "php-fpm-serv"
+              name: phpFpmCfg.serviceName
           },
           spec: {
               type: ServiceType.NODE_PORT,
