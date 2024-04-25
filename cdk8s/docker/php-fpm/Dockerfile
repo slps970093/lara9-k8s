@@ -22,7 +22,7 @@ RUN docker-php-ext-install -j$(nproc) bcmath calendar exif gettext sockets dba m
 # supervisor
 RUN apt-get install supervisor python3 python3-pip git pipx -y &&\
     pipx ensurepath &&\
-    pipx install git+https://github.com/coderanger/supervisor-stdout
+    pip install git+https://github.com/coderanger/supervisor-stdout
 
 # redis EXT
 RUN pecl install redis && docker-php-ext-enable redis
