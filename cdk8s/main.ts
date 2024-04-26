@@ -46,7 +46,7 @@ export class MyChart extends Chart {
               name: "nginx-configmap"
           },
           data: {
-              "default": `
+              "default.conf": `
 server {
     listen   80; ## listen for ipv4; this line is default and implied
     listen   [::]:80 default ipv6only=on; ## listen for ipv6
@@ -125,7 +125,6 @@ http {
     #gzip  on;
 
     include /etc/nginx/conf.d/*.conf;
-    include /etc/nginx/sites-available/*;
 }
               `
           }
@@ -225,7 +224,8 @@ http {
                               volumeMounts: [
                                   {
                                       name: "nginx-site",
-                                      mountPath: "/etc/nginx/sites-available"
+                                      mountPath: "/etc/nginx/conf.d/default.conf",
+                                      subPath: "default.conf"
                                   },
                                   {
                                       name: "nginx-cfg",
@@ -242,8 +242,8 @@ http {
                                   name: cfgMapNginx.name,
                                   items: [
                                       {
-                                          key: "default",
-                                          path: "default"
+                                          key: "default.conf",
+                                          path: "default.conf"
                                       }
                                   ]
                               }
