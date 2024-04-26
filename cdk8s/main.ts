@@ -138,7 +138,6 @@ http {
           },
           data: {
               "www.conf": `
-                [www]
                 user = www-data
                 group = www-data
                 listen = 0.0.0.0:9000
