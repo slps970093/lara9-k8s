@@ -138,8 +138,6 @@ http {
           },
           data: {
               "www.conf": `
-                user = www-data
-                group = www-data
                 listen = 0.0.0.0:9000
                 pm.status_path=/status
 
@@ -287,7 +285,7 @@ http {
                               volumeMounts: [
                                   {
                                       name: "fpm-config",
-                                      mountPath: "/usr/local/etc/php-fpm.d/"
+                                      mountPath: "/usr/local/etc/php-fpm.d/www.conf:"
                                   }
                               ],
                               ports: [ { containerPort: 9000 } ]
