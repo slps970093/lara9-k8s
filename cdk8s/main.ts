@@ -336,7 +336,7 @@ http {
               name: phpFpmCfg.serviceName
           },
           spec: {
-              type: ServiceType.NODE_PORT,
+              type: ServiceType.CLUSTER_IP,
               ports: [
                   {
                       name: "fpm-port",
