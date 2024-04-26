@@ -138,8 +138,6 @@ http {
           },
           data: {
               "www.conf": `
-                [global]
-
                 [www]
                 user = www-data
                 group = www-data
