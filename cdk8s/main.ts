@@ -138,6 +138,9 @@ http {
           },
           data: {
               "www.conf": `
+                [www]
+                user = www-data
+                group = www-data
                 listen = 0.0.0.0:9000
                 pm.status_path=/status
 
@@ -150,7 +153,7 @@ http {
 
                 request_terminate_timeout = 60
                 request_slowlog_timeout = 3
-                slowlog = log/$pool.slowlog.log
+                slowlog = /var/log/php-slowlog.log
               `
           }
       })
@@ -285,7 +288,8 @@ http {
                               volumeMounts: [
                                   {
                                       name: "fpm-config",
-                                      mountPath: "/usr/local/etc/php-fpm.d/www.conf:"
+                                      mountPath: "/usr/local/etc/php-fpm.d/www.conf",
+                                      subPath: "www.conf"
                                   }
                               ],
                               ports: [ { containerPort: 9000 } ]
