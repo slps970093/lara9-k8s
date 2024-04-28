@@ -75,6 +75,12 @@ server {
     gzip_disable "MSIE [1-6]\\.";
 
     location / {
+        index index.php;
+        # 這段的意義代表我們將所有的請求都交給 Laravel 的路由去處理，因此如 404 的頁面都是交由 Laravel 處理
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$  {
         # PHP FPM 所在位置
         root           /var/www/html/public;
         fastcgi_pass ${phpFpmCfg.serviceName}.${phpFpmCfg.namespace}.svc.cluster.local:9000;
@@ -513,12 +519,14 @@ pm.max_spare_servers = 3
 ; Default Value: not set
 ; Note: slowlog is mandatory if request_slowlog_timeout is set
 ;slowlog = log/$pool.log.slow
+slowlog = /var/log/php/$pool.slow.log
 
 ; The timeout for serving a single request after which a PHP backtrace will be
 ; dumped to the 'slowlog' file. A value of '0s' means 'off'.
 ; Available units: s(econds)(default), m(inutes), h(ours), or d(ays)
 ; Default Value: 0
 ;request_slowlog_timeout = 0
+request_slowlog_timeout = 2
 
 ; Depth of slow log stack trace.
 ; Default Value: 20
@@ -530,6 +538,7 @@ pm.max_spare_servers = 3
 ; Available units: s(econds)(default), m(inutes), h(ours), or d(ays)
 ; Default Value: 0
 ;request_terminate_timeout = 0
+request_terminate_timeout = 60
 
 ; The timeout set by 'request_terminate_timeout' ini option is not engaged after
 ; application calls 'fastcgi_finish_request' or when application has finished and
@@ -628,6 +637,9 @@ pm.max_spare_servers = 3
 ;php_admin_value[error_log] = /var/log/fpm-php.www.log
 ;php_admin_flag[log_errors] = on
 ;php_admin_value[memory_limit] = 32M
+
+php_admin_value[error_log] = /var/log/php/fpm-php.www.log
+php_admin_flag[log_errors] = on
               `
           }
       })
