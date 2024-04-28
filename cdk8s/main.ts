@@ -764,6 +764,11 @@ php_admin_flag[log_errors] = on
                           {
                               name: "php-fpm",
                               image: "<<PHP_FPM_DOCKER_IMAGE_URL>>",
+                              securityContext: {
+                                  capabilities: {
+                                      add: ["SYS_PTRACE"]
+                                  }
+                              },
                               envFrom: [
                                   {
                                       secretRef: {
