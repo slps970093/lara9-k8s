@@ -519,7 +519,7 @@ pm.max_spare_servers = 3
 ; Default Value: not set
 ; Note: slowlog is mandatory if request_slowlog_timeout is set
 ;slowlog = log/$pool.log.slow
-slowlog = /var/log/php/$pool.slow.log
+slowlog = /var/log/$pool.php-slow.log
 
 ; The timeout for serving a single request after which a PHP backtrace will be
 ; dumped to the 'slowlog' file. A value of '0s' means 'off'.
