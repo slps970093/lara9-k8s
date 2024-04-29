@@ -74,6 +74,13 @@ server {
     gzip_types text/plain text/css text/xml application/json text/javascript application/x-javascript application/xml;
     gzip_disable "MSIE [1-6]\\.";
 
+    location /nginx_status {
+        stub_status on;
+        # Optionally restrict access to IP addresses if needed
+        # allow 127.0.0.1;
+        # deny all;
+    }
+
     location / {
         index index.php;
         # 這段的意義代表我們將所有的請求都交給 Laravel 的路由去處理，因此如 404 的頁面都是交由 Laravel 處理
@@ -717,7 +724,27 @@ php_admin_flag[log_errors] = on
                                       mountPath: "/etc/nginx/nginx.conf",
                                       subPath: "nginx.conf"
                                   }
-                              ]
+                              ],
+                              // 服務健康檢查 - 就緒檢查
+                              readinessProbe: {
+                                  successThreshold: 1,
+                                  failureThreshold: 3,
+                                  periodSeconds: 5,
+                                  timeoutSeconds: 2,
+                                  httpGet: {
+                                      port: 80,
+                                      path: "/nginx_status"
+                                  }
+                              },
+                              // 服務健康檢查 - 存活檢查
+                              livenessProbe: {
+                                  initialDelaySeconds: 0,
+                                  periodSeconds: 10,
+                                  httpGet: {
+                                      port: 80,
+                                      path: "/nginx_status"
+                                  }
+                              }
                           },
                       ],
                       volumes: [
