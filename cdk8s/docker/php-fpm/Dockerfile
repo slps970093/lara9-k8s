@@ -25,7 +25,8 @@ RUN apt-get install supervisor python3 python3-pip git pipx -y &&\
     pip install git+https://github.com/coderanger/supervisor-stdout --break-system-packages
 
 # php fpm healthcheck
-RUN wget -O /usr/local/bin/php-fpm-healthcheck \
+RUN apt-get install -y --no-install-recommends libfcgi-bin &&\
+    wget -O /usr/local/bin/php-fpm-healthcheck \
     https://raw.githubusercontent.com/renatomefi/php-fpm-healthcheck/master/php-fpm-healthcheck \
     && chmod +x /usr/local/bin/php-fpm-healthcheck
 
