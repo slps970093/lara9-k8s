@@ -21,3 +21,7 @@ Route::get('/slow', function () {
     sleep(5);
     return view('welcome');
 });
+
+Route::get('/info', function () {
+    phpinfo();
+});
