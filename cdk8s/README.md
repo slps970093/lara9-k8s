@@ -24,7 +24,7 @@ pipeline {
             agent any
             environment {
                 AWS_REGION="ap-northeast-1"
-                ECR_REPOSITORY_URL="*** "
+                ECR_REPOSITORY_URL="***"
                 ECR_REPOSITORY_NAME=""
             }
             steps {

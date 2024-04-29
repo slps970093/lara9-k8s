@@ -732,7 +732,7 @@ php_admin_flag[log_errors] = on
                                   periodSeconds: 5,
                                   timeoutSeconds: 2,
                                   httpGet: {
-                                      port: 80,
+                                      port: IntOrString.fromNumber(80),
                                       path: "/nginx_status"
                                   }
                               },
@@ -741,7 +741,7 @@ php_admin_flag[log_errors] = on
                                   initialDelaySeconds: 0,
                                   periodSeconds: 10,
                                   httpGet: {
-                                      port: 80,
+                                      port: IntOrString.fromNumber(80),
                                       path: "/nginx_status"
                                   }
                               }
