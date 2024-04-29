@@ -64,8 +64,8 @@ server {
     server_tokens off;
 
     # Add stdout logging
-    error_log /dev/stdout info;
-    access_log /dev/stdout;
+    error_log /var/log/nginx/site-error.log info;
+    access_log /var/log/nginx/site-access.log;
 
     # reduce the data that needs to be sent over network
     gzip on;
