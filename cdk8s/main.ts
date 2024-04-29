@@ -402,6 +402,7 @@ pm.max_spare_servers = 3
 ;       may conflict with a real PHP file.
 ; Default Value: not set
 ;pm.status_path = /status
+pm.status_path = /fpm-status
 
 ; The address on which to accept FastCGI status request. This creates a new
 ; invisible pool that can handle requests independently. This is useful
@@ -783,7 +784,25 @@ php_admin_flag[log_errors] = on
                                       subPath: "www.conf"
                                   }
                               ],
-                              ports: [ { containerPort: 9000 } ]
+                              ports: [ { containerPort: 9000 } ],
+                              // 服務健康檢查 - 就緒檢查
+                              readinessProbe: {
+                                  successThreshold: 1,
+                                  failureThreshold: 3,
+                                  periodSeconds: 5,
+                                  timeoutSeconds: 2,
+                                  exec: {
+                                      command: ["php-fpm-healthcheck"]
+                                  }
+                              },
+                              // 服務健康檢查 - 存活檢查
+                              livenessProbe: {
+                                  initialDelaySeconds: 0,
+                                  periodSeconds: 10,
+                                  exec: {
+                                      command: ["php-fpm-healthcheck", "--listen-queue=10"]
+                                  }
+                              }
                           }
                       ],
                       volumes: [
@@ -995,7 +1014,6 @@ php_admin_flag[log_errors] = on
               ]
           }
       });
-
   }
 }
 

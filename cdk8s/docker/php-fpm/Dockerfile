@@ -24,6 +24,11 @@ RUN apt-get install supervisor python3 python3-pip git pipx -y &&\
     pipx ensurepath &&\
     pip install git+https://github.com/coderanger/supervisor-stdout --break-system-packages
 
+# php fpm healthcheck
+RUN wget -O /usr/local/bin/php-fpm-healthcheck \
+    https://raw.githubusercontent.com/renatomefi/php-fpm-healthcheck/master/php-fpm-healthcheck \
+    && chmod +x /usr/local/bin/php-fpm-healthcheck
+
 # redis EXT
 RUN pecl install redis && docker-php-ext-enable redis
 
@@ -33,5 +38,8 @@ RUN chmod a+x /var/www/html/cdk8s/docker/php-fpm/start.sh &&\
     apt-get autoremove &&\
     rm -rf /var/lib/apt/lists/* &&\
     rm -rf /tmp/pear
+
+ENV FCGI_CONNECT=127.0.0.1:9000
+ENV FCGI_STATUS_PATH=/fpm-status
 
 CMD ["/var/www/html/cdk8s/docker/php-fpm/start.sh"]
