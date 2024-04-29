@@ -1,11 +1,10 @@
 FROM nginx:1.25.5
 
 COPY ./cdk8s/docker/nginx/start.sh /
+COPY ./cdk8s/docker/nginx/supervisord.conf /
 
 RUN apt-get update -y &&\
     apt-get install wget gnupg2 -y
-
-
 
 # filebeat
 RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - &&\
